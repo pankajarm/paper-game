@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Q-Sharp Alignment Quest</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #5856D6; /* A nice purple */
+            --secondary-color: #007AFF;
+            --bg-color: #F2F2F7;
+            --container-bg: #FFFFFF;
+            --text-color: #1D1D1F;
+            --subtle-text-color: #6E6E73;
+            --border-color: #E5E5EA;
+            --success-color: #34C759;
+            --warning-color: #FF9500;
+        }
+
+        *, *::before, *::after {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Lato', 'Roboto', -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+            line-height: 1.65;
+            color: var(--text-color);
+            background-color: var(--bg-color);
+            margin: 0;
+            padding: 1rem;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 1rem auto;
+            background-color: var(--container-bg);
+            padding: 1.5rem 2rem;
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.07);
+        }
+
+        h1, h2, h3, h4 {
+            font-family: 'Roboto', sans-serif;
+            color: #000;
+            line-height: 1.3;
+        }
+
+        h1 {
+            text-align: center;
+            font-size: clamp(2em, 5vw, 2.8em);
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            color: var(--primary-color);
+        }
+        
+        h2 {
+            font-size: clamp(1.5em, 4vw, 2em);
+            border-bottom: 2px solid var(--border-color);
+            padding-bottom: 0.75rem;
+            margin-top: 2.5rem;
+        }
+        
+        h3 {
+             font-size: clamp(1.2em, 3.5vw, 1.5em);
+        }
+
+        p, li {
+            font-size: 1.05em;
+            color: var(--subtle-text-color);
+        }
+
+        .mission-brief {
+            background-color: #F5F5FA;
+            border-left: 5px solid var(--primary-color);
+            padding: 1.5rem;
+            margin: 2rem 0;
+            border-radius: 8px;
+        }
+        .mission-brief p {
+            margin: 0;
+            color: #2c3e50;
+        }
+
+        details {
+            margin-bottom: 1rem;
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            overflow: hidden;
+            transition: box-shadow 0.3s ease;
+        }
+        details:hover {
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        }
+
+        summary {
+            font-weight: 700;
+            font-size: 1.2em;
+            padding: 1rem 1.5rem;
+            background-color: #FAFAFC;
+            cursor: pointer;
+            outline: none;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        
+        summary::after {
+            content: '▶';
+            font-size: 0.8em;
+            transition: transform 0.2s ease-in-out;
+        }
+
+        details[open] > summary::after {
+            transform: rotate(90deg);
+        }
+
+        .step-content {
+            padding: 1.5rem;
+            border-top: 1px solid var(--border-color);
+            background-color: var(--container-bg);
+        }
+        
+        .step-content strong {
+            color: var(--text-color);
+        }
+
+        .results {
+            background-color: #F6FFF8;
+            padding: 1.5rem;
+            margin-top: 1.5rem;
+            border: 1px solid #D6F5DD;
+            border-radius: 8px;
+        }
+        .results h4 {
+            color: var(--success-color);
+            margin-top: 0;
+        }
+        
+        .warning {
+            background-color: #FFF9E6;
+            border-left: 5px solid var(--warning-color);
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            border-radius: 8px;
+        }
+        
+        .warning p {
+            margin: 0;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1.5rem;
+            font-size: 0.95em;
+        }
+        th, td {
+            border: 1px solid var(--border-color);
+            padding: 0.75rem;
+            text-align: left;
+        }
+        th {
+            background-color: #f7f7f7;
+            font-weight: 700;
+        }
+        tr:nth-child(even) {
+            background-color: #fcfcfc;
+        }
+        .gain {
+            color: var(--success-color);
+            font-weight: bold;
+        }
+        .loss {
+            color: #FF3B30;
+            font-weight: bold;
+        }
+
+        .final-conclusion {
+            background-color: #F0F8FF;
+            border-left: 5px solid var(--secondary-color);
+            padding: 1.5rem;
+            margin-top: 3rem;
+            border-radius: 8px;
+        }
+        .final-conclusion h3 {
+            color: #0056b3;
+            margin-top: 0;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>⚔️ The Q-Sharp Alignment Quest ⚔️</h1>
+        <div class="mission-brief">
+            <p><strong>Your Quest:</strong> You are an AI Alignment researcher. Large Language Models (LLMs) sometimes learn bad habits or "shortcuts" from their training. Your mission is to fix these flaws using a new, provably optimal algorithm called <strong>Q-Sharp (Q#)</strong>. Can you guide your LLM to better reasoning and performance?</p>
+        </div>
+
+        <h2>Phase 1: The Problem with Post-Training</h2>
+        <p>After initial training, LLMs undergo "post-training" to align them with human preferences. But current methods have critical flaws.</p>
+
+        <details>
+            <summary>The Flaw in Existing Methods</summary>
+            <div class="step-content">
+                <p>Common post-training algorithms fall into two camps, and both have problems:</p>
+                <ul>
+                    <li><strong>Policy-Based Methods (like PPO, DPO):</strong> These directly update the LLM's weights. [span_0](start_span)However, they can fail to fix faulty shortcuts the model learned during pre-training[span_0](end_span). It's hard to unlearn bad habits!</li>
+                    <li><strong>Value-Based Methods (like CD, VAS):</strong> These guide the LLM using a "value function" that scores different outputs. [span_1](start_span)But existing methods use an *unregularized* Q-function, which isn't guaranteed to find the best policy for the actual objective[span_1](end_span). [span_2](start_span)This can lead to sub-optimal rewards and poor performance[span_2](end_span).</li>
+                </ul>
+                <div class="warning">
+                    <p><strong>⚠️ The Challenge:</strong> How can we guide the LLM to the provably best policy while avoiding its learned shortcuts?</p>
+                </div>
+            </div>
+        </details>
+
+        <h2>Phase 2: Unleashing the Hero Algorithm: Q-Sharp (Q#)</h2>
+        <p>Enter <strong>Q-Sharp (Q#)</strong>, a new, theoretically-grounded algorithm designed to overcome these challenges. It's a value-based method, but with a crucial difference.</p>
+
+        <details>
+            <summary>The Core Idea: Using the *Optimal* Q-Function</summary>
+            <div class="step-content">
+                [span_3](start_span)<p>Instead of using a flawed guide, Q# learns the <strong>optimal KL-regularized Q-function (Q*,η)</strong> and uses it to steer the reference policy[span_3](end_span). [span_4](start_span)This is the mathematically correct guide that is guaranteed to converge to the best possible policy for the objective[span_4](end_span).</p>
+                <p>Essentially, Q# tells the LLM: "Don't just do what you think is good; do what is *provably optimal*."</p>
+            </div>
+        </details>
+        
+        <details>
+            <summary>The Secret Weapon: Distributional RL</summary>
+            <div class="step-content">
+                <p>How does Q# learn this optimal function? It uses a technique called <strong>Distributional Reinforcement Learning</strong>.</p>
+                <ul>
+                    [span_5](start_span)[span_6](start_span)<li>Instead of just predicting a single score (the expected reward), it learns the entire *distribution* of possible rewards for a given action[span_5](end_span)[span_6](end_span).</li>
+                    [span_7](start_span)[span_8](start_span)<li>This is done through simple, stable supervised learning (like Maximum Likelihood Estimation) rather than complex and often unstable Temporal Difference (TD) learning used in traditional RL[span_7](end_span)[span_8](end_span).</li>
+                    [span_9](start_span)<li>This approach not only improves performance but also provides stronger theoretical guarantees[span_9](end_span).</li>
+                </ul>
+            </div>
+        </details>
+
+        <details>
+            <summary>The Training Loop: Iterative Improvement</summary>
+            <div class="step-content">
+                [span_10](start_span)<p>Q# uses an iterative training process inspired by the DAgger algorithm to ensure its guide remains accurate[span_10](end_span).</p>
+                <ol>
+                    <li><strong>Collect Data:</strong> Use the current Q# policy to generate new text.</li>
+                    <li><strong>Learn the Distribution:</strong> Use this new data to improve the model's estimate of the reward distribution.</li>
+                    <li><strong>Update Policy:</strong> Create a better policy using the improved distribution estimate.</li>
+                    [span_11](start_span)[span_12](start_span)<li><strong>Repeat:</strong> This loop of collecting data and updating the model ensures Q# gets progressively better and avoids the "distribution shift" problem where a model fails on data it hasn't seen before[span_11](end_span)[span_12](end_span).</li>
+                </ol>
+            </div>
+        </details>
+        
+        <h2>Phase 3: The Gauntlet (Experiments)</h2>
+        <p>A new algorithm is nothing without proof. Q# was tested against difficult challenges to prove its worth.</p>
+
+        <details>
+            <summary>⚔️ Challenge 1: The Star-Graph Shortcut</summary>
+            <div class="step-content">
+                <p>The star-graph is a task where models often learn a simple but wrong "shortcut." The goal is to see if post-training can fix this.</p>
+                <div class="results">
+                    <h4>Results: Victory for Q#!</h4>
+                    [span_13](start_span)[span_14](start_span)<p>While policy-based methods like REINFORCE and RPO failed to fix the shortcut, <strong>Q# consistently corrected the flaw</strong> and achieved near-perfect accuracy[span_13](end_span)[span_14](end_span). This demonstrates its power to overcome inherited biases.</p>
+                </div>
+            </div>
+        </details>
+        
+        <details>
+            <summary>🧠 Challenge 2: Math Reasoning</summary>
+            <div class="step-content">
+                <p>Q# was then tested on challenging math datasets (GSM8K and MATH) using Llama 3 models as the base.</p>
+                <div class="results">
+                    <h4>Results: Pareto-Dominance!</h4>
+                    [span_15](start_span)[span_16](start_span)<p>Q# consistently improved performance, achieving <strong>higher accuracy with a smaller KL divergence</strong> (meaning it didn't stray far from the original model's style) compared to both the baseline Llama 3 models and the flawed CD approach[span_15](end_span)[span_16](end_span).</p>
+                    [span_17](start_span)[span_18](start_span)<p>Amazingly, even a small 1B parameter Q# model was able to guide and improve a massive 70B parameter Llama 3 model, showing incredible efficiency[span_17](end_span)[span_18](end_span).</p>
+                    <table>
+                      <tr><th>π_ref</th><th>Methods</th><th>pass@1 ↑</th><th>KL-Divergence ↓</th></tr>
+                      <tr><td>Llama 3 8B (GSM8K)</td><td>π_ref</td><td>78.4</td><td>-</td></tr>
+                      <tr><td>Llama 3 8B (GSM8K)</td><td>CD</td><td>77.8</td><td class="loss">6.39</td></tr>
+                      <tr><td>Llama 3 8B (GSM8K)</td><td><strong>Q# (ours)</strong></td><td class="gain">84.5</td><td class="gain">2.65</td></tr>
+                       <tr><td>Llama 3.1 8B (MATH)</td><td>π_ref</td><td>43.9</td><td>-</td></tr>
+                      <tr><td>Llama 3.1 8B (MATH)</td><td>CD</td><td>45.3</td><td class="loss">26.8</td></tr>
+                      <tr><td>Llama 3.1 8B (MATH)</td><td><strong>Q# (ours)</strong></td><td class="gain">46.7</td><td class="gain">8.69</td></tr>
+                    </table>
+                </div>
+            </div>
+        </details>
+
+        <div class="final-conclusion">
+            <h3>🏆 Quest Complete! 🏆</h3>
+            <p>You have successfully navigated the challenges of LLM alignment! By using the <strong>Q-Sharp (Q#)</strong> algorithm, you have demonstrated a theoretically-grounded and empirically powerful method for post-training. Q# provably converges to the optimal policy, corrects pre-training shortcuts that other methods miss, and achieves a better performance-vs-KL tradeoff. This establishes Q# as a superior and promising direction for making LLMs more capable and reliable.</p>
+        </div>
+
+    </div>
+
+</body>
+</html>
